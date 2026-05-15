@@ -1,0 +1,6 @@
+[theme]
+primaryColor = "#bc9e5a"     # Make the buttons your Gray Orange so they pop!
+backgroundColor = "#001d4f"  # Your Dark Blue as the main background
+secondaryBackgroundColor = "#001538" # An even darker blue for the sidebar
+textColor = "#ffffff"        # White text so you can read it
+font = "sans serif"
