@@ -1,104 +1,85 @@
 import streamlit as st
 
-# --- PAGE CONFIGURATION ---
-st.set_page_config(page_title="Reading List | Senti News", page_icon="🔖", layout="wide")
+st.set_page_config(page_title="Saved Articles", page_icon="💾", layout="wide")
 
-# --- CUSTOM CSS ---
+# =========================
+# CUSTOM CSS
+# =========================
 st.markdown("""
-    <style>
-    /* Card Styling */
-    .news-card {
-        border: 1px solid #e0e0e0;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
-        background-color: #ffffff;
-        transition: box-shadow 0.3s ease;
-        border-left: 5px solid #bc9e5a; /* Gray Orange Accent for saved items */
-    }
-    .news-card:hover {
-        box-shadow: 0 4px 12px rgba(188, 158, 90, 0.2);
-    }
-    
-    /* Typography */
-    .article-title { color: #001d4f; margin-top: 0; margin-bottom: 5px; }
-    .source-text { color: gray; font-size: 0.9rem; margin-bottom: 15px; }
-    .summary-text { color: #333333; font-size: 1.05rem; }
-    .read-more { color: #bc9e5a; text-decoration: none; font-weight: bold; }
-    
-    /* Sentiment Tags */
-    .sent-badge {
-        padding: 3px 8px;
-        border-radius: 12px;
-        font-size: 0.8rem;
-        font-weight: bold;
-        color: white;
-    }
-    .sent-positive { background-color: #2e7d32; } 
-    .sent-neutral { background-color: #bc9e5a; }  
-    .sent-negative { background-color: #c62828; } 
-    </style>
+<style>
+.saved-container {
+    background-color: #17356d;
+    padding: 40px;
+    border-radius: 25px;
+    max-width: 900px;
+    margin: auto;
+    text-align: center;
+    color: white;
+}
+.saved-title {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+.saved-subtitle {
+    font-size: 16px;
+    color: #cfcfcf;
+    margin-bottom: 30px;
+}
+.empty-box {
+    background-color: #304b7d;
+    padding: 30px;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+.empty-text {
+    font-size: 18px;
+    color: #d9d9d9;
+    margin-bottom: 10px;
+}
+.browse-btn {
+    background-color: #d4af37;
+    padding: 10px 20px;
+    border-radius: 12px;
+    color: black;
+    font-weight: 600;
+    text-decoration: none;
+}
+.browse-btn:hover {
+    background-color: #b9972f;
+}
+.back-link {
+    color: #d4af37;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+.back-link:hover {
+    text-decoration: underline;
+}
+</style>
 """, unsafe_allow_html=True)
 
-# --- SIDEBAR NAVIGATION ---
-with st.sidebar:
-    st.markdown("<h2 style='color: #001d4f; text-align: center;'>Senti News</h2>", unsafe_allow_html=True)
-    st.divider()
-    
-    if st.button("⬅️ Back to News Feed", use_container_width=True):
-        st.switch_page("pages/home.py")
-        
-    st.write("")
-    if st.button("Log Out", type="primary", use_container_width=True):
-        st.switch_page("main.py")
+# =========================
+# SAVED PAGE CONTENT
+# =========================
+st.markdown('<div class="saved-container">', unsafe_allow_html=True)
 
-# --- MAIN CONTENT ---
-st.markdown("<h1 style='color: #001d4f;'>My Reading List 🔖</h1>", unsafe_allow_html=True)
-st.write("Catch up on the articles you've saved for later.")
-st.divider()
+# Back to Home link
+st.markdown('<a href="/" class="back-link">⬅ Back to Home</a>', unsafe_allow_html=True)
 
-# --- MOCK SAVED DATA ---
-# In the future, this will be fetched from a database based on the logged-in user
-mock_saved_articles = [
-    {
-        "title": "New Climate Policy Debated in Assembly", 
-        "source": "Daily Planet", 
-        "sentiment": "Neutral", 
-        "summary": "Lawmakers spent the weekend debating the specifics of the new carbon emission reduction targets. Both sides presented extensive economic forecasts.",
-        "date_saved": "2026-05-15"
-    }
-]
+# Title + subtitle
+st.markdown('<div class="saved-title">Saved Articles</div>', unsafe_allow_html=True)
+st.markdown('<div class="saved-subtitle">0 articles saved</div>', unsafe_allow_html=True)
 
-if not mock_saved_articles:
-    st.info("Your reading list is currently empty. Go to the news feed to save some articles!")
-else:
-    # --- RENDER SAVED ARTICLES ---
-    for article in mock_saved_articles:
-        if article['sentiment'] == "Positive":
-            badge_class = "sent-positive"
-            icon = "📈"
-        elif article['sentiment'] == "Negative":
-            badge_class = "sent-negative"
-            icon = "📉"
-        else:
-            badge_class = "sent-neutral"
-            icon = "⚖️"
+# Empty state box
+st.markdown("""
+<div class="empty-box">
+    <div class="empty-text">No saved articles yet</div>
+    <div class="empty-text">Start saving articles by clicking the 💾 Save button on any article.</div>
+    <a href="/" class="browse-btn">Browse Articles</a>
+</div>
+""", unsafe_allow_html=True)
 
-        card_html = f"""
-        <div class="news-card">
-            <h3 class="article-title">{article['title']}</h3>
-            <div class="source-text">
-                {article['source']} • 
-                <span class="sent-badge {badge_class}">{icon} {article['sentiment']}</span>
-                <span style="float: right; color: #888;">Saved on: {article['date_saved']}</span>
-            </div>
-            <p class="summary-text">{article['summary']}</p>
-            <a href="#" class="read-more">Read Full Article →</a>
-        </div>
-        """
-        st.markdown(card_html, unsafe_allow_html=True)
-        
-        # Remove button
-        col1, col2 = st.columns([8, 1])
-        with col2:
-            st.button("🗑️ Remove", key=f"remove_{article['title']}")
+st.markdown('</div>', unsafe_allow_html=True)
