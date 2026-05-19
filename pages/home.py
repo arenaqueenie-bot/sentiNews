@@ -161,14 +161,19 @@ html, body, [class*="css"] {font-family: 'Arial', sans-serif;}
 # =========================
 st.markdown('<div class="main-container">', unsafe_allow_html=True)
 
-# =========================
 # HEADER
-# =========================
 header1, header2 = st.columns([8, 2])
 with header1:
     st.markdown('<div class="logo-text">Senti <span class="logo-highlight">News</span></div>', unsafe_allow_html=True)
 with header2:
     profile_option = st.selectbox("", ["Profile", "Saved", "Logout"])
+    if profile_option == "Profile":
+        st.switch_page("account.py")
+    elif profile_option == "Saved":
+        st.switch_page("save.py")
+    elif profile_option == "Logout":
+        st.session_state.clear()
+        st.switch_page("login.py")
 
 # =========================
 # CATEGORY SECTION
